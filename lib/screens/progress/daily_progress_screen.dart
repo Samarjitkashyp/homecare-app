@@ -8,7 +8,6 @@ import 'package:homecare_app/core/constants/app_constants.dart';
 import 'package:homecare_app/screens/home/home_screen.dart';
 import 'package:homecare_app/core/utils/globals.dart';
 import 'package:homecare_app/core/theme/app_style.dart';
-import 'package:homecare_app/core/utils/responsive.dart';
 
 class DailyProgressScreen extends StatefulWidget {
   const DailyProgressScreen({super.key});
@@ -305,7 +304,7 @@ class _DailyProgressScreenState extends State<DailyProgressScreen> {
                           },
                         ),
                       );
-                    }).toList(),
+                    }),
                   ],
                 ),
               ),
@@ -341,7 +340,7 @@ class _DailyProgressScreenState extends State<DailyProgressScreen> {
         ),
         body: Container(
           width: double.infinity,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
@@ -425,7 +424,7 @@ class _DailyProgressScreenState extends State<DailyProgressScreen> {
         ],
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -629,7 +628,7 @@ class _DailyProgressScreenState extends State<DailyProgressScreen> {
                           ),
                         ),
                       );
-                    }).toList(),
+                    }),
                   ],
                 ),
               ),
@@ -751,7 +750,7 @@ class _DailyProgressScreenState extends State<DailyProgressScreen> {
                           ),
                         ),
                       );
-                    }).toList(),
+                    }),
                   ],
                 ),
               ),

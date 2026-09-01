@@ -16,24 +16,24 @@ class UserModel {
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
-    int _parseInt(dynamic value) {
+    int parseInt(dynamic value) {
       if (value == null) return 0;
       if (value is int) return value;
       if (value is String) return int.tryParse(value) ?? 0;
       return 0;
     }
 
-    String? _parseString(dynamic value) {
+    String? parseString(dynamic value) {
       if (value == null) return null;
       return value.toString().trim();
     }
 
     return UserModel(
-      id: _parseInt(json['id']),
-      name: _parseString(json['name']) ?? '',
-      email: _parseString(json['email']) ?? '',
-      phone: _parseString(json['phone']),
-      address: _parseString(json['address']),
+      id: parseInt(json['id']),
+      name: parseString(json['name']) ?? '',
+      email: parseString(json['email']) ?? '',
+      phone: parseString(json['phone']),
+      address: parseString(json['address']),
     );
   }
 

@@ -460,7 +460,7 @@ class _TimeInScreenState extends State<TimeInScreen> {
                   ),
                 )
               : DropdownButtonFormField<Map<String, dynamic>>(
-                  value: _selectedPolicyholder,
+                  initialValue: _selectedPolicyholder,
                   isExpanded: true,
                   decoration: InputDecoration(
                     border: InputBorder.none,

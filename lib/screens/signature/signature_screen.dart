@@ -6,7 +6,6 @@ import 'package:homecare_app/providers/time_provider.dart';
 import 'package:homecare_app/providers/signature_provider.dart';
 import 'package:homecare_app/widgets/custom_button.dart';
 import 'package:homecare_app/widgets/loading_widget.dart';
-import 'package:homecare_app/screens/report/weekly_report_screen.dart';
 import 'package:homecare_app/screens/home/home_screen.dart';
 import 'package:homecare_app/core/utils/globals.dart';
 import 'package:homecare_app/core/theme/app_style.dart';
@@ -289,7 +288,7 @@ class _SignatureScreenState extends State<SignatureScreen> {
         ),
         body: Container(
           width: double.infinity,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
@@ -326,12 +325,12 @@ class _SignatureScreenState extends State<SignatureScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 32),
                 child: Text(
                   'Signature Capture Completed. Kindly go to the Report page.',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     color: Colors.grey,
                   ),
@@ -405,7 +404,7 @@ class _SignatureScreenState extends State<SignatureScreen> {
         ],
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,

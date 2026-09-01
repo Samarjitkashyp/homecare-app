@@ -24,7 +24,6 @@ class WeeklyReportScreen extends StatefulWidget {
 
 class _WeeklyReportScreenState extends State<WeeklyReportScreen> {
   bool _isDownloading = false;
-  String? _lastSavedPath;
 
   @override
   void initState() {
@@ -269,7 +268,6 @@ class _WeeklyReportScreenState extends State<WeeklyReportScreen> {
       if (!mounted) return;
       setState(() {
         _isDownloading = false;
-        _lastSavedPath = finalPath;
       });
 
       _showSuccessDialog(finalPath);
@@ -471,7 +469,7 @@ class _WeeklyReportScreenState extends State<WeeklyReportScreen> {
       body: reportProvider.isLoading
           ? const LoadingWidget()
           : Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -816,7 +814,7 @@ class _WeeklyReportScreenState extends State<WeeklyReportScreen> {
               const SizedBox(width: 8),
               Text(
                 title,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.bold,
                   color: Colors.black87,

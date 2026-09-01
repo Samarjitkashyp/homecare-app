@@ -269,7 +269,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                 child: OutlinedButton.icon(
                   onPressed: () async {
                     await authProvider.logout();
-                    if (!mounted) return;
+                    if (!context.mounted) return;
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(

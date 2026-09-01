@@ -29,7 +29,7 @@ class ReportModel {
 
   factory ReportModel.fromJson(Map<String, dynamic> json) {
     // ✅ Helper function to convert String to double safely
-    double? _parseDouble(dynamic value) {
+    double? parseDouble(dynamic value) {
       if (value == null) return null;
       if (value is double) return value;
       if (value is int) return value.toDouble();
@@ -38,7 +38,7 @@ class ReportModel {
     }
 
     // ✅ Helper function to convert dynamic to String safely
-    String? _parseString(dynamic value) {
+    String? parseString(dynamic value) {
       if (value == null) return null;
       return value.toString();
     }
@@ -50,18 +50,18 @@ class ReportModel {
       policyholder: json['policyholder'] as Map<String, dynamic>?,
       caregiver: json['caregiver'] as Map<String, dynamic>?,
       dateOfService:
-          _parseString(timeEntry?['date'] ?? json['date_of_service']),
-      timeIn: _parseString(timeEntry?['time_in'] ?? json['time_in']),
-      timeOut: _parseString(timeEntry?['time_out'] ?? json['time_out']),
+          parseString(timeEntry?['date'] ?? json['date_of_service']),
+      timeIn: parseString(timeEntry?['time_in'] ?? json['time_in']),
+      timeOut: parseString(timeEntry?['time_out'] ?? json['time_out']),
       totalHours:
-          _parseDouble(timeEntry?['total_hours'] ?? json['total_hours']),
-      rate: _parseDouble(timeEntry?['rate'] ?? json['rate']),
+          parseDouble(timeEntry?['total_hours'] ?? json['total_hours']),
+      rate: parseDouble(timeEntry?['rate'] ?? json['rate']),
       totalCharge:
-          _parseDouble(timeEntry?['total_charge'] ?? json['total_charge']),
+          parseDouble(timeEntry?['total_charge'] ?? json['total_charge']),
       adls: json['adls'] as Map<String, dynamic>?,
       iadls: json['iadls'] as Map<String, dynamic>?,
       signatures: json['signatures'] as Map<String, dynamic>?,
-      certification: _parseString(json['certification']),
+      certification: parseString(json['certification']),
     );
   }
 

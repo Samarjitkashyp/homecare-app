@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:homecare_app/core/theme/app_theme.dart';
 
 class ReportPreviewScreen extends StatelessWidget {
   final Map<String, dynamic>? reportData;
@@ -75,7 +74,7 @@ class ReportPreviewScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(14),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.blue.shade200.withOpacity(0.3),
+                      color: Colors.blue.shade200.withValues(alpha: 0.3),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
@@ -96,7 +95,7 @@ class ReportPreviewScreen extends StatelessWidget {
                       'Week: ${reportData?['week_start'] ?? ''} to ${reportData?['week_end'] ?? ''}',
                       style: TextStyle(
                         fontSize: 13,
-                        color: Colors.white.withOpacity(0.85),
+                        color: Colors.white.withValues(alpha: 0.85),
                       ),
                     ),
                   ],
@@ -269,7 +268,7 @@ class ReportPreviewScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Icon(icon, size: 16, color: color),
@@ -277,7 +276,7 @@ class ReportPreviewScreen extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 title,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.bold,
                   color: Colors.black87,

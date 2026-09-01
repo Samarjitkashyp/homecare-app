@@ -179,7 +179,7 @@ class _PolicyholdersScreenState extends State<PolicyholdersScreen> {
                                   };
 
                                   if (isEditing) {
-                                    data['id'] = policyholder!.id.toString();
+                                    data['id'] = policyholder.id.toString();
                                   }
 
                                   final provider =
@@ -191,7 +191,7 @@ class _PolicyholdersScreenState extends State<PolicyholdersScreen> {
                                       ? await provider.updatePolicyholder(data)
                                       : await provider.createPolicyholder(data);
 
-                                  if (!mounted) return;
+                                  if (!context.mounted) return;
                                   Navigator.pop(context);
 
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -379,7 +379,7 @@ class _PolicyholdersScreenState extends State<PolicyholdersScreen> {
                       );
                       final result = await provider.deletePolicyholder(id);
 
-                      if (!mounted) return;
+                      if (!context.mounted) return;
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(

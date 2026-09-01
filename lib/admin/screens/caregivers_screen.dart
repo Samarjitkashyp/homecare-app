@@ -188,7 +188,7 @@ class _CaregiversScreenState extends State<CaregiversScreen> {
                                   };
 
                                   if (isEditing) {
-                                    data['id'] = caregiver!.id.toString();
+                                    data['id'] = caregiver.id.toString();
                                   } else {
                                     data['password'] = passwordController.text;
                                   }
@@ -202,8 +202,8 @@ class _CaregiversScreenState extends State<CaregiversScreen> {
                                       ? await provider.updateCaregiver(data)
                                       : await provider.createCaregiver(data);
 
-                                  // ✅ FIXED: Check mounted before pop
-                                  if (!mounted) return;
+                                  // Guard the dialog context across the await
+                                  if (!context.mounted) return;
                                   Navigator.pop(context);
 
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -392,8 +392,7 @@ class _CaregiversScreenState extends State<CaregiversScreen> {
                       );
                       final result = await provider.deleteCaregiver(id);
 
-                      // ✅ FIXED: Check mounted before showing SnackBar
-                      if (!mounted) return;
+                      if (!context.mounted) return;
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(

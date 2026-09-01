@@ -1,4 +1,5 @@
 import 'package:homecare_app/core/utils/app_logger.dart';
+import 'package:homecare_app/core/utils/secure_store.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:homecare_app/core/network/api_service.dart';
@@ -26,7 +27,7 @@ class AdminAuthProvider extends ChangeNotifier {
   Future<void> _loadSavedData() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      _token = prefs.getString('admin_token');
+      _token = await SecureStore.read('admin_token');
 
       if (_token != null && _token!.isNotEmpty) {
         final role = prefs.getString('admin_role') ?? '';
@@ -44,7 +45,7 @@ class AdminAuthProvider extends ChangeNotifier {
         } else {
           AppLogger.d('🟡 AdminAuthProvider: Invalid role "$role", clearing data');
           _token = null;
-          await prefs.remove('admin_token');
+          await SecureStore.delete('admin_token');
           await prefs.remove('admin_id');
           await prefs.remove('admin_name');
           await prefs.remove('admin_email');
@@ -102,13 +103,13 @@ class AdminAuthProvider extends ChangeNotifier {
         final prefs = await SharedPreferences.getInstance();
 
         // ✅ Clear caregiver data when admin logs in
-        await prefs.remove(AppConstants.tokenKey);
+        await SecureStore.delete(AppConstants.tokenKey);
         await prefs.remove(AppConstants.userIdKey);
         await prefs.remove(AppConstants.userNameKey);
         await prefs.remove(AppConstants.userEmailKey);
         await prefs.remove('user_role');
 
-        await prefs.setString('admin_token', _token!);
+        await SecureStore.write('admin_token', _token!);
         await prefs.setInt('admin_id', _adminUser!.id);
         await prefs.setString('admin_name', _adminUser!.name);
         await prefs.setString('admin_email', _adminUser!.email);
@@ -133,7 +134,7 @@ class AdminAuthProvider extends ChangeNotifier {
 
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('admin_token');
+    await SecureStore.delete('admin_token');
     await prefs.remove('admin_id');
     await prefs.remove('admin_name');
     await prefs.remove('admin_email');

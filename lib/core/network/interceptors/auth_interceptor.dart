@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:homecare_app/core/constants/app_constants.dart';
+import 'package:homecare_app/core/utils/secure_store.dart';
 
 class AuthInterceptor extends Interceptor {
   @override
@@ -9,8 +9,7 @@ class AuthInterceptor extends Interceptor {
     // ✅ Check if Authorization header is already set manually
     // If it is (e.g. from AdminDataProvider), don't overwrite it with the caregiver token
     if (!options.headers.containsKey('Authorization')) {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString(AppConstants.tokenKey);
+      final token = await SecureStore.read(AppConstants.tokenKey);
 
       if (token != null && token.isNotEmpty) {
         options.headers['Authorization'] = 'Bearer $token';
@@ -78,9 +77,8 @@ class AuthInterceptor extends Interceptor {
 
   void _handleTokenExpired() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      // Only clear the caregiver token, don't use prefs.clear() which nukes EVERYTHING
-      await prefs.remove(AppConstants.tokenKey);
+      // Only clear the caregiver token
+      await SecureStore.delete(AppConstants.tokenKey);
       debugPrint('🟢 AuthInterceptor: Caregiver token cleared due to expiration');
     } catch (e) {
       debugPrint('🔴 AuthInterceptor: Error clearing token: $e');

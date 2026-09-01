@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:homecare_app/core/constants/api_endpoints.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:homecare_app/core/utils/secure_store.dart';
 import 'package:homecare_app/providers/time_provider.dart';
 import 'package:homecare_app/providers/auth_provider.dart';
 import 'package:homecare_app/widgets/custom_button.dart';
@@ -106,8 +106,7 @@ class _TimeInScreenState extends State<TimeInScreen> {
 
   Future<String?> _getToken() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      return prefs.getString(AppConstants.tokenKey);
+      return await SecureStore.read(AppConstants.tokenKey);
     } catch (e, s) {
       AppLogger.e('TimeIn: get token failed', e, s);
       return null;

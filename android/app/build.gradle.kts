@@ -19,7 +19,8 @@ android {
         applicationId = "com.example.homecare_app"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        // 23+ required for EncryptedSharedPreferences (flutter_secure_storage)
+        minSdk = maxOf(flutter.minSdkVersion, 23)
         targetSdk = 36
         versionCode = flutter.versionCode
         versionName = flutter.versionName

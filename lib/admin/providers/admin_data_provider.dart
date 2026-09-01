@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:homecare_app/core/utils/secure_store.dart';
 import 'package:homecare_app/core/network/api_service.dart';
 import 'package:homecare_app/core/constants/admin_api_endpoints.dart';
 import 'package:homecare_app/admin/models/admin_models.dart';
@@ -23,8 +23,7 @@ class AdminDataProvider extends ChangeNotifier {
   // Helper to get token
   Future<String?> _getToken() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      return prefs.getString('admin_token');
+      return await SecureStore.read('admin_token');
     } catch (e) {
       debugPrint('🔴 AdminDataProvider: Error getting token: $e');
       return null;

@@ -1,3 +1,4 @@
+import 'package:homecare_app/core/utils/app_logger.dart';
 import 'package:dio/dio.dart';
 import 'package:homecare_app/core/network/dio_client.dart';
 import 'package:homecare_app/core/constants/api_endpoints.dart';
@@ -14,9 +15,9 @@ class ApiService {
   // ============ AUTH ============
   Future<ResponseModel> login(String email, String password) async {
     try {
-      print('🟡 API Service: Sending login request');
-      print('📧 Email: $email');
-      print('🔗 URL: ${ApiEndpoints.getFullUrl(ApiEndpoints.login)}');
+      AppLogger.d('🟡 API Service: Sending login request');
+      AppLogger.d('📧 Email: $email');
+      AppLogger.d('🔗 URL: ${ApiEndpoints.getFullUrl(ApiEndpoints.login)}');
 
       final response = await _unAuthDio.post(
         ApiEndpoints.login,
@@ -26,20 +27,20 @@ class ApiService {
         },
       );
 
-      print('🟢 API Service: Response received');
-      print('📊 Status Code: ${response.statusCode}');
-      print('📝 Response Data: ${response.data}');
+      AppLogger.d('🟢 API Service: Response received');
+      AppLogger.d('📊 Status Code: ${response.statusCode}');
+      AppLogger.d('📝 Response Data: ${response.data}');
 
       return ResponseModel.fromJson(response.data);
     } on DioException catch (e) {
-      print('🔴 API Service: DioException caught');
-      print('🔴 Error Type: ${e.type}');
-      print('🔴 Error Message: ${e.message}');
-      print('🔴 Response: ${e.response?.data}');
-      print('🔴 Request URL: ${e.requestOptions.uri}');
+      AppLogger.d('🔴 API Service: DioException caught');
+      AppLogger.d('🔴 Error Type: ${e.type}');
+      AppLogger.d('🔴 Error Message: ${e.message}');
+      AppLogger.d('🔴 Response: ${e.response?.data}');
+      AppLogger.d('🔴 Request URL: ${e.requestOptions.uri}');
       return _handleError(e);
     } catch (e) {
-      print('🔴 API Service: Unknown error: $e');
+      AppLogger.d('🔴 API Service: Unknown error: $e');
       return ResponseModel(
         status: false,
         message: 'Unexpected error: $e',
@@ -60,11 +61,11 @@ class ApiService {
   // ============ TIME ============
   Future<ResponseModel> timeIn(int policyholderId, String date, String timeIn) async {
     try {
-      print('🟡 API Service: Sending timeIn request');
-      print('📋 Policyholder ID: $policyholderId');
-      print('📅 Date: $date');
-      print('⏰ Time: $timeIn');
-      print('🔗 URL: ${ApiEndpoints.getFullUrl(ApiEndpoints.timeIn)}');
+      AppLogger.d('🟡 API Service: Sending timeIn request');
+      AppLogger.d('📋 Policyholder ID: $policyholderId');
+      AppLogger.d('📅 Date: $date');
+      AppLogger.d('⏰ Time: $timeIn');
+      AppLogger.d('🔗 URL: ${ApiEndpoints.getFullUrl(ApiEndpoints.timeIn)}');
 
       final response = await _dio.post(
         ApiEndpoints.timeIn,
@@ -75,18 +76,18 @@ class ApiService {
         },
       );
 
-      print('🟢 API Service: TimeIn response received');
-      print('📊 Status Code: ${response.statusCode}');
-      print('📝 Response Data: ${response.data}');
+      AppLogger.d('🟢 API Service: TimeIn response received');
+      AppLogger.d('📊 Status Code: ${response.statusCode}');
+      AppLogger.d('📝 Response Data: ${response.data}');
 
       return ResponseModel.fromJson(response.data);
     } on DioException catch (e) {
-      print('🔴 API Service: DioException - ${e.message}');
-      print('🔴 Response: ${e.response?.data}');
-      print('🔴 Request URL: ${e.requestOptions.uri}');
+      AppLogger.d('🔴 API Service: DioException - ${e.message}');
+      AppLogger.d('🔴 Response: ${e.response?.data}');
+      AppLogger.d('🔴 Request URL: ${e.requestOptions.uri}');
       return _handleError(e);
     } catch (e) {
-      print('🔴 API Service: Unknown error - $e');
+      AppLogger.d('🔴 API Service: Unknown error - $e');
       return ResponseModel(
         status: false,
         message: 'Unexpected error: $e',
@@ -97,10 +98,10 @@ class ApiService {
 
   Future<ResponseModel> timeOut(String timeOut, double rate) async {
     try {
-      print('🟡 API Service: Sending timeOut request');
-      print('⏰ Time Out: $timeOut');
-      print('💰 Rate: $rate');
-      print('🔗 URL: ${ApiEndpoints.getFullUrl(ApiEndpoints.timeOut)}');
+      AppLogger.d('🟡 API Service: Sending timeOut request');
+      AppLogger.d('⏰ Time Out: $timeOut');
+      AppLogger.d('💰 Rate: $rate');
+      AppLogger.d('🔗 URL: ${ApiEndpoints.getFullUrl(ApiEndpoints.timeOut)}');
 
       final response = await _dio.post(
         ApiEndpoints.timeOut,
@@ -110,36 +111,36 @@ class ApiService {
         },
       );
       
-      print('🟢 API Service: TimeOut response received');
-      print('📊 Status Code: ${response.statusCode}');
-      print('📝 Response Data: ${response.data}');
+      AppLogger.d('🟢 API Service: TimeOut response received');
+      AppLogger.d('📊 Status Code: ${response.statusCode}');
+      AppLogger.d('📝 Response Data: ${response.data}');
 
       return ResponseModel.fromJson(response.data);
     } on DioException catch (e) {
-      print('🔴 API Service: TimeOut error - ${e.message}');
-      print('🔴 Request URL: ${e.requestOptions.uri}');
+      AppLogger.d('🔴 API Service: TimeOut error - ${e.message}');
+      AppLogger.d('🔴 Request URL: ${e.requestOptions.uri}');
       return _handleError(e);
     }
   }
 
   Future<ResponseModel> getTodayLog(String date) async {
     try {
-      print('🟡 API Service: Fetching today\'s log');
-      print('📅 Date: $date');
-      print('🔗 URL: ${ApiEndpoints.getFullUrl(ApiEndpoints.todayLog)}');
+      AppLogger.d('🟡 API Service: Fetching today\'s log');
+      AppLogger.d('📅 Date: $date');
+      AppLogger.d('🔗 URL: ${ApiEndpoints.getFullUrl(ApiEndpoints.todayLog)}');
 
       final response = await _dio.get(
         ApiEndpoints.todayLog,
         queryParameters: {'date': date},
       );
 
-      print('🟢 API Service: TodayLog response received');
-      print('📊 Status Code: ${response.statusCode}');
-      print('📝 Response Data: ${response.data}');
+      AppLogger.d('🟢 API Service: TodayLog response received');
+      AppLogger.d('📊 Status Code: ${response.statusCode}');
+      AppLogger.d('📝 Response Data: ${response.data}');
 
       return ResponseModel.fromJson(response.data);
     } on DioException catch (e) {
-      print('🔴 API Service: TodayLog error - ${e.message}');
+      AppLogger.d('🔴 API Service: TodayLog error - ${e.message}');
       return _handleError(e);
     }
   }
@@ -147,44 +148,44 @@ class ApiService {
   // ============ PROGRESS ============
   Future<ResponseModel> saveDailyProgress(Map<String, dynamic> data) async {
     try {
-      print('🟡 API Service: Saving daily progress');
-      print('📊 Data: $data');
-      print('🔗 URL: ${ApiEndpoints.getFullUrl(ApiEndpoints.saveDaily)}');
+      AppLogger.d('🟡 API Service: Saving daily progress');
+      AppLogger.d('📊 Data: $data');
+      AppLogger.d('🔗 URL: ${ApiEndpoints.getFullUrl(ApiEndpoints.saveDaily)}');
 
       final response = await _dio.post(
         ApiEndpoints.saveDaily,
         data: data,
       );
       
-      print('🟢 API Service: SaveDaily response received');
-      print('📊 Status Code: ${response.statusCode}');
-      print('📝 Response Data: ${response.data}');
+      AppLogger.d('🟢 API Service: SaveDaily response received');
+      AppLogger.d('📊 Status Code: ${response.statusCode}');
+      AppLogger.d('📝 Response Data: ${response.data}');
 
       return ResponseModel.fromJson(response.data);
     } on DioException catch (e) {
-      print('🔴 API Service: SaveDaily error - ${e.message}');
+      AppLogger.d('🔴 API Service: SaveDaily error - ${e.message}');
       return _handleError(e);
     }
   }
 
   Future<ResponseModel> getDailyProgress(int timeEntryId) async {
     try {
-      print('🟡 API Service: Fetching daily progress');
-      print('🆔 Time Entry ID: $timeEntryId');
-      print('🔗 URL: ${ApiEndpoints.getFullUrl(ApiEndpoints.getDaily)}');
+      AppLogger.d('🟡 API Service: Fetching daily progress');
+      AppLogger.d('🆔 Time Entry ID: $timeEntryId');
+      AppLogger.d('🔗 URL: ${ApiEndpoints.getFullUrl(ApiEndpoints.getDaily)}');
 
       final response = await _dio.get(
         ApiEndpoints.getDaily,
         queryParameters: {'time_entry_id': timeEntryId},
       );
 
-      print('🟢 API Service: GetDaily response received');
-      print('📊 Status Code: ${response.statusCode}');
-      print('📝 Response Data: ${response.data}');
+      AppLogger.d('🟢 API Service: GetDaily response received');
+      AppLogger.d('📊 Status Code: ${response.statusCode}');
+      AppLogger.d('📝 Response Data: ${response.data}');
 
       return ResponseModel.fromJson(response.data);
     } on DioException catch (e) {
-      print('🔴 API Service: GetDaily error - ${e.message}');
+      AppLogger.d('🔴 API Service: GetDaily error - ${e.message}');
       return _handleError(e);
     }
   }
@@ -192,44 +193,44 @@ class ApiService {
   // ============ REPORT ============
   Future<ResponseModel> generateReport(int timeEntryId) async {
     try {
-      print('🟡 API Service: Generating report');
-      print('🆔 Time Entry ID: $timeEntryId');
-      print('🔗 URL: ${ApiEndpoints.getFullUrl(ApiEndpoints.generateReport)}');
+      AppLogger.d('🟡 API Service: Generating report');
+      AppLogger.d('🆔 Time Entry ID: $timeEntryId');
+      AppLogger.d('🔗 URL: ${ApiEndpoints.getFullUrl(ApiEndpoints.generateReport)}');
 
       final response = await _dio.post(
         ApiEndpoints.generateReport,
         data: {'time_entry_id': timeEntryId},
       );
 
-      print('🟢 API Service: GenerateReport response received');
-      print('📊 Status Code: ${response.statusCode}');
-      print('📝 Response Data: ${response.data}');
+      AppLogger.d('🟢 API Service: GenerateReport response received');
+      AppLogger.d('📊 Status Code: ${response.statusCode}');
+      AppLogger.d('📝 Response Data: ${response.data}');
 
       return ResponseModel.fromJson(response.data);
     } on DioException catch (e) {
-      print('🔴 API Service: GenerateReport error - ${e.message}');
+      AppLogger.d('🔴 API Service: GenerateReport error - ${e.message}');
       return _handleError(e);
     }
   }
 
   Future<ResponseModel> getReport(int timeEntryId) async {
     try {
-      print('🟡 API Service: Fetching report');
-      print('🆔 Time Entry ID: $timeEntryId');
-      print('🔗 URL: ${ApiEndpoints.getFullUrl(ApiEndpoints.getReport)}');
+      AppLogger.d('🟡 API Service: Fetching report');
+      AppLogger.d('🆔 Time Entry ID: $timeEntryId');
+      AppLogger.d('🔗 URL: ${ApiEndpoints.getFullUrl(ApiEndpoints.getReport)}');
 
       final response = await _dio.get(
         ApiEndpoints.getReport,
         queryParameters: {'entry_id': timeEntryId},
       );
 
-      print('🟢 API Service: GetReport response received');
-      print('📊 Status Code: ${response.statusCode}');
-      print('📝 Response Data: ${response.data}');
+      AppLogger.d('🟢 API Service: GetReport response received');
+      AppLogger.d('📊 Status Code: ${response.statusCode}');
+      AppLogger.d('📝 Response Data: ${response.data}');
 
       return ResponseModel.fromJson(response.data);
     } on DioException catch (e) {
-      print('🔴 API Service: GetReport error - ${e.message}');
+      AppLogger.d('🔴 API Service: GetReport error - ${e.message}');
       return _handleError(e);
     }
   }
@@ -237,43 +238,43 @@ class ApiService {
   // ============ SIGNATURE ============
   Future<ResponseModel> saveSignature(Map<String, dynamic> data) async {
     try {
-      print('🟡 API Service: Saving signature');
-      print('📊 Data: $data');
-      print('🔗 URL: ${ApiEndpoints.getFullUrl(ApiEndpoints.saveSignature)}');
+      AppLogger.d('🟡 API Service: Saving signature');
+      AppLogger.d('📊 Data: $data');
+      AppLogger.d('🔗 URL: ${ApiEndpoints.getFullUrl(ApiEndpoints.saveSignature)}');
 
       final response = await _dio.post(
         ApiEndpoints.saveSignature,
         data: data,
       );
 
-      print('🟢 API Service: SaveSignature response received');
-      print('📊 Status Code: ${response.statusCode}');
-      print('📝 Response Data: ${response.data}');
+      AppLogger.d('🟢 API Service: SaveSignature response received');
+      AppLogger.d('📊 Status Code: ${response.statusCode}');
+      AppLogger.d('📝 Response Data: ${response.data}');
 
       return ResponseModel.fromJson(response.data);
     } on DioException catch (e) {
-      print('🔴 API Service: SaveSignature error - ${e.message}');
+      AppLogger.d('🔴 API Service: SaveSignature error - ${e.message}');
       return _handleError(e);
     }
   }
 
   Future<ResponseModel> getSignature(int timeEntryId) async {
     try {
-      print('🟡 API Service: Fetching signatures for entry: $timeEntryId');
-      print('🔗 URL: ${ApiEndpoints.getFullUrl(ApiEndpoints.getSignature)}');
+      AppLogger.d('🟡 API Service: Fetching signatures for entry: $timeEntryId');
+      AppLogger.d('🔗 URL: ${ApiEndpoints.getFullUrl(ApiEndpoints.getSignature)}');
 
       final response = await _dio.get(
         ApiEndpoints.getSignature,
         queryParameters: {'time_entry_id': timeEntryId},
       );
 
-      print('🟢 API Service: GetSignature response received');
-      print('📊 Status Code: ${response.statusCode}');
-      print('📝 Response Data: ${response.data}');
+      AppLogger.d('🟢 API Service: GetSignature response received');
+      AppLogger.d('📊 Status Code: ${response.statusCode}');
+      AppLogger.d('📝 Response Data: ${response.data}');
 
       return ResponseModel.fromJson(response.data);
     } on DioException catch (e) {
-      print('🔴 API Service: GetSignature error - ${e.message}');
+      AppLogger.d('🔴 API Service: GetSignature error - ${e.message}');
       return _handleError(e);
     }
   }
@@ -282,9 +283,9 @@ class ApiService {
   // ✅ Add admin-specific APIs with debug logs
   Future<ResponseModel> adminLogin(String email, String password) async {
     try {
-      print('🟡 API Service: Admin login request');
-      print('📧 Email: $email');
-      print('🔗 URL: ${ApiEndpoints.getFullUrl('api/admin/login.php')}');
+      AppLogger.d('🟡 API Service: Admin login request');
+      AppLogger.d('📧 Email: $email');
+      AppLogger.d('🔗 URL: ${ApiEndpoints.getFullUrl('api/admin/login.php')}');
 
       final response = await _unAuthDio.post(
         'api/admin/login.php',
@@ -294,14 +295,14 @@ class ApiService {
         },
       );
 
-      print('🟢 API Service: Admin login response received');
-      print('📊 Status Code: ${response.statusCode}');
-      print('📝 Response Data: ${response.data}');
+      AppLogger.d('🟢 API Service: Admin login response received');
+      AppLogger.d('📊 Status Code: ${response.statusCode}');
+      AppLogger.d('📝 Response Data: ${response.data}');
 
       return ResponseModel.fromJson(response.data);
     } on DioException catch (e) {
-      print('🔴 API Service: Admin login error - ${e.message}');
-      print('🔴 Request URL: ${e.requestOptions.uri}');
+      AppLogger.d('🔴 API Service: Admin login error - ${e.message}');
+      AppLogger.d('🔴 Request URL: ${e.requestOptions.uri}');
       return _handleError(e);
     }
   }
@@ -310,18 +311,18 @@ class ApiService {
   ResponseModel _handleError(DioException error) {
     String message = 'Something went wrong';
 
-    print('🔴 ========== ERROR DETAILS ==========');
-    print('🔴 Error Type: ${error.type}');
-    print('🔴 Error Message: ${error.message}');
-    print('🔴 Request URL: ${error.requestOptions.uri}');
-    print('🔴 Request Method: ${error.requestOptions.method}');
-    print('🔴 Request Headers: ${error.requestOptions.headers}');
-    print('🔴 Request Data: ${error.requestOptions.data}');
+    AppLogger.d('🔴 ========== ERROR DETAILS ==========');
+    AppLogger.d('🔴 Error Type: ${error.type}');
+    AppLogger.d('🔴 Error Message: ${error.message}');
+    AppLogger.d('🔴 Request URL: ${error.requestOptions.uri}');
+    AppLogger.d('🔴 Request Method: ${error.requestOptions.method}');
+    AppLogger.d('🔴 Request Headers: ${error.requestOptions.headers}');
+    AppLogger.d('🔴 Request Data: ${error.requestOptions.data}');
     
     if (error.response != null) {
-      print('🔴 Response Status: ${error.response?.statusCode}');
-      print('🔴 Response Data: ${error.response?.data}');
-      print('🔴 Response Headers: ${error.response?.headers}');
+      AppLogger.d('🔴 Response Status: ${error.response?.statusCode}');
+      AppLogger.d('🔴 Response Data: ${error.response?.data}');
+      AppLogger.d('🔴 Response Headers: ${error.response?.headers}');
       
       try {
         final data = error.response?.data;
@@ -352,8 +353,8 @@ class ApiService {
       message = error.message ?? 'Unknown error occurred';
     }
 
-    print('🔴 Final Error Message: $message');
-    print('🔴 =====================================');
+    AppLogger.d('🔴 Final Error Message: $message');
+    AppLogger.d('🔴 =====================================');
 
     return ResponseModel(
       status: false,

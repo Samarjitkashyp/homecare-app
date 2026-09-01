@@ -1,3 +1,4 @@
+import 'package:homecare_app/core/utils/app_logger.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:homecare_app/core/constants/app_constants.dart';
@@ -38,9 +39,9 @@ class AuthProvider extends ChangeNotifier {
             name: prefs.getString(AppConstants.userNameKey) ?? '',
             email: prefs.getString(AppConstants.userEmailKey) ?? '',
           );
-          print('✅ AuthProvider: Loaded caregiver: ${_user?.name}');
+          AppLogger.d('✅ AuthProvider: Loaded caregiver: ${_user?.name}');
         } else {
-          print('🟡 AuthProvider: Invalid role "$role", clearing caregiver data');
+          AppLogger.d('🟡 AuthProvider: Invalid role "$role", clearing caregiver data');
           _token = null;
           _isAuthenticated = false;
           _user = null;
@@ -52,10 +53,10 @@ class AuthProvider extends ChangeNotifier {
           await prefs.remove('user_role');
         }
       } else {
-        print('🟡 AuthProvider: No token found');
+        AppLogger.d('🟡 AuthProvider: No token found');
       }
     } catch (e) {
-      print('🔴 AuthProvider: Error loading saved data: $e');
+      AppLogger.d('🔴 AuthProvider: Error loading saved data: $e');
     }
     notifyListeners();
   }
@@ -64,19 +65,19 @@ class AuthProvider extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    print('🟡 AuthProvider: Caregiver login attempt for: $email');
+    AppLogger.d('🟡 AuthProvider: Caregiver login attempt for: $email');
 
     try {
       final response = await _apiService.login(email, password);
 
-      print('🟢 AuthProvider: Response status: ${response.status}');
-      print('📝 Message: ${response.message}');
+      AppLogger.d('🟢 AuthProvider: Response status: ${response.status}');
+      AppLogger.d('📝 Message: ${response.message}');
 
       if (response.status && response.data != null) {
         try {
           final userData = response.data['user'];
           if (userData == null) {
-            print('🔴 AuthProvider: User data is null in response');
+            AppLogger.d('🔴 AuthProvider: User data is null in response');
             _isLoading = false;
             notifyListeners();
             return ResponseModel(
@@ -90,7 +91,7 @@ class AuthProvider extends ChangeNotifier {
 
           // ✅ CRITICAL: Only allow caregiver login
           if (role == 'admin') {
-            print('🔴 AuthProvider: Admin user cannot login as caregiver');
+            AppLogger.d('🔴 AuthProvider: Admin user cannot login as caregiver');
             _isLoading = false;
             notifyListeners();
             return ResponseModel(
@@ -102,7 +103,7 @@ class AuthProvider extends ChangeNotifier {
 
           // ✅ Only allow caregiver role
           if (role != 'caregiver') {
-            print('🔴 AuthProvider: Invalid role for caregiver login: $role');
+            AppLogger.d('🔴 AuthProvider: Invalid role for caregiver login: $role');
             _isLoading = false;
             notifyListeners();
             return ResponseModel(
@@ -131,20 +132,20 @@ class AuthProvider extends ChangeNotifier {
           await prefs.setString(AppConstants.userEmailKey, _user!.email);
           await prefs.setString('user_role', role);
 
-          print('✅ AuthProvider: Caregiver login successful: ${_user!.name}');
+          AppLogger.d('✅ AuthProvider: Caregiver login successful: ${_user!.name}');
         } catch (e) {
-          print('🔴 AuthProvider: Error parsing data: $e');
+          AppLogger.d('🔴 AuthProvider: Error parsing data: $e');
           _isAuthenticated = false;
         }
       } else {
-        print('🔴 AuthProvider: Login failed - ${response.message}');
+        AppLogger.d('🔴 AuthProvider: Login failed - ${response.message}');
       }
 
       _isLoading = false;
       notifyListeners();
       return response;
     } catch (e) {
-      print('🔴 AuthProvider: Exception: $e');
+      AppLogger.d('🔴 AuthProvider: Exception: $e');
       _isLoading = false;
       notifyListeners();
       return ResponseModel(
@@ -168,6 +169,6 @@ class AuthProvider extends ChangeNotifier {
     _isAuthenticated = false;
 
     notifyListeners();
-    print('✅ AuthProvider: Caregiver logged out');
+    AppLogger.d('✅ AuthProvider: Caregiver logged out');
   }
 }

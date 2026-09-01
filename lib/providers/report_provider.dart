@@ -1,3 +1,4 @@
+import 'package:homecare_app/core/utils/app_logger.dart';
 import 'package:flutter/material.dart';
 import 'package:homecare_app/core/network/api_service.dart';
 import 'package:homecare_app/models/response_model.dart';
@@ -16,11 +17,11 @@ class ReportProvider extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    print('🟡 ReportProvider: Generating report for entry: $timeEntryId');
+    AppLogger.d('🟡 ReportProvider: Generating report for entry: $timeEntryId');
 
     try {
       if (timeEntryId <= 0) {
-        print('🔴 Invalid timeEntryId: $timeEntryId');
+        AppLogger.d('🔴 Invalid timeEntryId: $timeEntryId');
         _isLoading = false;
         notifyListeners();
         return ResponseModel(
@@ -32,16 +33,16 @@ class ReportProvider extends ChangeNotifier {
 
       final response = await _apiService.generateReport(timeEntryId);
 
-      print('🟢 ReportProvider: Response received');
-      print('📊 Status: ${response.status}');
-      print('📝 Message: ${response.message}');
+      AppLogger.d('🟢 ReportProvider: Response received');
+      AppLogger.d('📊 Status: ${response.status}');
+      AppLogger.d('📝 Message: ${response.message}');
 
       if (response.status && response.data != null) {
         try {
           _report = ReportModel.fromJson(response.data);
-          print('✅ Report generated successfully');
+          AppLogger.d('✅ Report generated successfully');
         } catch (e) {
-          print('🔴 Error parsing report data: $e');
+          AppLogger.d('🔴 Error parsing report data: $e');
           _isLoading = false;
           notifyListeners();
           return ResponseModel(
@@ -51,7 +52,7 @@ class ReportProvider extends ChangeNotifier {
           );
         }
       } else {
-        print('🔴 Report generation failed: ${response.message}');
+        AppLogger.d('🔴 Report generation failed: ${response.message}');
       }
 
       _isLoading = false;
@@ -59,7 +60,7 @@ class ReportProvider extends ChangeNotifier {
       return response;
 
     } catch (e) {
-      print('🔴 ReportProvider Exception: $e');
+      AppLogger.d('🔴 ReportProvider Exception: $e');
       _isLoading = false;
       notifyListeners();
       return ResponseModel(
@@ -74,20 +75,20 @@ class ReportProvider extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    print('🟡 ReportProvider: Fetching report for entry: $timeEntryId');
+    AppLogger.d('🟡 ReportProvider: Fetching report for entry: $timeEntryId');
 
     try {
       final response = await _apiService.getReport(timeEntryId);
 
-      print('🟢 ReportProvider: Response received');
-      print('📊 Status: ${response.status}');
+      AppLogger.d('🟢 ReportProvider: Response received');
+      AppLogger.d('📊 Status: ${response.status}');
 
       if (response.status && response.data != null) {
         try {
           _report = ReportModel.fromJson(response.data);
-          print('✅ Report fetched successfully');
+          AppLogger.d('✅ Report fetched successfully');
         } catch (e) {
-          print('🔴 Error parsing report data: $e');
+          AppLogger.d('🔴 Error parsing report data: $e');
         }
       }
 
@@ -96,7 +97,7 @@ class ReportProvider extends ChangeNotifier {
       return response;
 
     } catch (e) {
-      print('🔴 ReportProvider Exception: $e');
+      AppLogger.d('🔴 ReportProvider Exception: $e');
       _isLoading = false;
       notifyListeners();
       return ResponseModel(

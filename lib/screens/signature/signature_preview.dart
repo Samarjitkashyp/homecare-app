@@ -1,3 +1,4 @@
+import 'package:homecare_app/core/utils/app_logger.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 
@@ -257,7 +258,7 @@ class SignaturePreviewScreen extends StatelessWidget {
         },
       );
     } catch (e) {
-      print('🔴 Signature Preview Error: $e');
+      AppLogger.d('🔴 Signature Preview Error: $e');
       return const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

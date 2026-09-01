@@ -1,3 +1,4 @@
+import 'package:homecare_app/core/utils/app_logger.dart';
 import 'package:flutter/material.dart';
 import 'package:homecare_app/core/network/api_service.dart';
 import 'package:homecare_app/models/response_model.dart';
@@ -34,14 +35,14 @@ class TimeProvider extends ChangeNotifier {
         _timeInValue = response.data['time_in'] as String?;
         _hasActiveEntry = true;
 
-        print('✅ TimeProvider: Time-In registered. Entry ID: $_currentEntryId');
+        AppLogger.d('✅ TimeProvider: Time-In registered. Entry ID: $_currentEntryId');
       }
 
       _isLoading = false;
       notifyListeners();
       return response;
     } catch (e) {
-      print('🔴 TimeProvider: Exception - $e');
+      AppLogger.d('🔴 TimeProvider: Exception - $e');
       _isLoading = false;
       notifyListeners();
       return ResponseModel(
@@ -80,7 +81,7 @@ class TimeProvider extends ChangeNotifier {
       notifyListeners();
       return response;
     } catch (e) {
-      print('🔴 TimeProvider: Exception - $e');
+      AppLogger.d('🔴 TimeProvider: Exception - $e');
       _isLoading = false;
       notifyListeners();
       return ResponseModel(
@@ -127,7 +128,7 @@ class TimeProvider extends ChangeNotifier {
       notifyListeners();
       return response;
     } catch (e) {
-      print('🔴 TimeProvider: Exception - $e');
+      AppLogger.d('🔴 TimeProvider: Exception - $e');
       _isLoading = false;
       notifyListeners();
       return ResponseModel(

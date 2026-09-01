@@ -1,3 +1,4 @@
+import 'package:homecare_app/core/utils/app_logger.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:homecare_app/core/network/api_service.dart';
@@ -39,9 +40,9 @@ class AdminAuthProvider extends ChangeNotifier {
             email: prefs.getString('admin_email') ?? '',
             role: role,
           );
-          print('✅ AdminAuthProvider: Loaded admin: ${_adminUser?.name}');
+          AppLogger.d('✅ AdminAuthProvider: Loaded admin: ${_adminUser?.name}');
         } else {
-          print('🟡 AdminAuthProvider: Invalid role "$role", clearing data');
+          AppLogger.d('🟡 AdminAuthProvider: Invalid role "$role", clearing data');
           _token = null;
           await prefs.remove('admin_token');
           await prefs.remove('admin_id');
@@ -51,7 +52,7 @@ class AdminAuthProvider extends ChangeNotifier {
         }
       }
     } catch (e) {
-      print('Error loading admin data: $e');
+      AppLogger.d('Error loading admin data: $e');
     }
     notifyListeners();
   }
@@ -60,7 +61,7 @@ class AdminAuthProvider extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    print('🟡 AdminAuthProvider: Admin login attempt for: $email');
+    AppLogger.d('🟡 AdminAuthProvider: Admin login attempt for: $email');
 
     try {
       final response = await _apiService.unAuthDio.post(
@@ -72,7 +73,7 @@ class AdminAuthProvider extends ChangeNotifier {
       );
 
       final data = response.data;
-      print('🟢 AdminAuthProvider: Response status: ${data['status']}');
+      AppLogger.d('🟢 AdminAuthProvider: Response status: ${data['status']}');
 
       if (data['status'] == true) {
         final userData = data['data']['user'];
@@ -80,7 +81,7 @@ class AdminAuthProvider extends ChangeNotifier {
 
         // ✅ CRITICAL: Only allow admin login
         if (role != 'admin') {
-          print('🔴 AdminAuthProvider: Non-admin user cannot login as admin');
+          AppLogger.d('🔴 AdminAuthProvider: Non-admin user cannot login as admin');
           _isLoading = false;
           notifyListeners();
           return {
@@ -115,7 +116,7 @@ class AdminAuthProvider extends ChangeNotifier {
 
         _isLoading = false;
         notifyListeners();
-        print('✅ AdminAuthProvider: Admin login successful: ${_adminUser?.name}');
+        AppLogger.d('✅ AdminAuthProvider: Admin login successful: ${_adminUser?.name}');
         return {'success': true, 'data': data['data']};
       } else {
         _isLoading = false;
@@ -123,7 +124,7 @@ class AdminAuthProvider extends ChangeNotifier {
         return {'success': false, 'message': data['message'] ?? 'Invalid credentials'};
       }
     } catch (e) {
-      print('🔴 AdminAuthProvider: Error: $e');
+      AppLogger.d('🔴 AdminAuthProvider: Error: $e');
       _isLoading = false;
       notifyListeners();
       return {'success': false, 'message': 'Error: $e'};
@@ -142,6 +143,6 @@ class AdminAuthProvider extends ChangeNotifier {
     _token = null;
     _isAuthenticated = false;
     notifyListeners();
-    print('✅ AdminAuthProvider: Admin logged out');
+    AppLogger.d('✅ AdminAuthProvider: Admin logged out');
   }
 }

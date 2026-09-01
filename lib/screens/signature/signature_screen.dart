@@ -24,6 +24,7 @@ class _SignatureScreenState extends State<SignatureScreen> {
   bool _caregiverSigned = false;
   bool _policyholderSigned = false;
   bool _isLoading = false;
+  bool _saved = false; // true only after signatures are actually saved
 
   @override
   void initState() {
@@ -68,12 +69,14 @@ class _SignatureScreenState extends State<SignatureScreen> {
     if (timeProvider.currentEntryId != null) {
       await signatureProvider.getSignature(timeProvider.currentEntryId!);
 
-      if (signatureProvider.signature != null) {
+      if (signatureProvider.signature != null && mounted) {
+        final cg = signatureProvider.signature!.caregiverSignature;
+        final ph = signatureProvider.signature!.policyholderSignature;
         setState(() {
-          _caregiverSigned =
-              signatureProvider.signature!.caregiverSignature.isNotEmpty;
-          _policyholderSigned =
-              signatureProvider.signature!.policyholderSignature.isNotEmpty;
+          _caregiverSigned = cg.isNotEmpty;
+          _policyholderSigned = ph.isNotEmpty;
+          // Only treat as "saved/completed" when BOTH are actually present.
+          _saved = cg.isNotEmpty && ph.isNotEmpty;
         });
       }
     }
@@ -192,6 +195,35 @@ class _SignatureScreenState extends State<SignatureScreen> {
     });
   }
 
+  // Decode a base64 signature safely — never throws on empty/corrupt data.
+  Widget _safeSigImage(String base64Image, {BoxFit fit = BoxFit.contain}) {
+    try {
+      var raw = base64Image.contains(',')
+          ? base64Image.split(',').last
+          : base64Image;
+      raw = raw.trim();
+      if (raw.isEmpty) return _sigPlaceholder();
+      final mod = raw.length % 4;
+      if (mod != 0) raw = raw.padRight(raw.length + (4 - mod), '=');
+      return Image.memory(
+        base64Decode(raw),
+        fit: fit,
+        errorBuilder: (_, __, ___) => _sigPlaceholder(),
+      );
+    } catch (_) {
+      return _sigPlaceholder();
+    }
+  }
+
+  Widget _sigPlaceholder() {
+    return Center(
+      child: Text(
+        'No signature',
+        style: TextStyle(fontSize: 11, color: Colors.grey.shade400),
+      ),
+    );
+  }
+
   Widget _buildSignaturePreview(String label, String base64Image) {
     return Column(
       children: [
@@ -220,10 +252,7 @@ class _SignatureScreenState extends State<SignatureScreen> {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.memory(
-              base64Decode(base64Image.split(',').last),
-              fit: BoxFit.contain,
-            ),
+            child: _safeSigImage(base64Image),
           ),
         ),
       ],
@@ -239,9 +268,10 @@ class _SignatureScreenState extends State<SignatureScreen> {
       return const LoadingWidget();
     }
 
-    if (signatureProvider.signature != null &&
-        _caregiverSigned &&
-        _policyholderSigned) {
+    if (_saved &&
+        signatureProvider.signature != null &&
+        signatureProvider.signature!.caregiverSignature.isNotEmpty &&
+        signatureProvider.signature!.policyholderSignature.isNotEmpty) {
       return Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -496,13 +526,8 @@ class _SignatureScreenState extends State<SignatureScreen> {
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
-                          child: Image.memory(
-                            base64Decode(signatureProvider
-                                .signature!.caregiverSignature
-                                .split(',')
-                                .last),
-                            fit: BoxFit.contain,
-                          ),
+                          child: _safeSigImage(
+                              signatureProvider.signature!.caregiverSignature),
                         ),
                       )
                     else
@@ -656,13 +681,8 @@ class _SignatureScreenState extends State<SignatureScreen> {
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
-                          child: Image.memory(
-                            base64Decode(signatureProvider
-                                .signature!.policyholderSignature
-                                .split(',')
-                                .last),
-                            fit: BoxFit.contain,
-                          ),
+                          child: _safeSigImage(signatureProvider
+                              .signature!.policyholderSignature),
                         ),
                       )
                     else

@@ -751,14 +751,32 @@ class _WeeklyReportScreenState extends State<WeeklyReportScreen> {
               borderRadius: BorderRadius.circular(8),
               border: Border.all(color: Colors.grey.shade200),
             ),
-            child: Image.memory(
-              base64.decode(base64Image.split(',').last),
-              fit: BoxFit.contain,
-            ),
+            child: _safeSignatureImage(base64Image),
           ),
         ],
       ],
     );
+  }
+
+  // Decode a base64 signature safely; never throws on corrupt data.
+  Widget _safeSignatureImage(String base64Image) {
+    try {
+      var raw = base64Image.contains(',')
+          ? base64Image.split(',').last
+          : base64Image;
+      raw = raw.trim();
+      // Pad to a multiple of 4 so malformed strings don't throw.
+      final mod = raw.length % 4;
+      if (mod != 0) raw = raw.padRight(raw.length + (4 - mod), '=');
+      return Image.memory(base64.decode(raw), fit: BoxFit.contain);
+    } catch (_) {
+      return Center(
+        child: Text(
+          'Signature unavailable',
+          style: TextStyle(fontSize: 11, color: Colors.grey.shade400),
+        ),
+      );
+    }
   }
 
   Widget _buildSectionCard({

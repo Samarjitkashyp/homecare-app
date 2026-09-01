@@ -66,5 +66,34 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+
+	<!-- ===== App Transport Security =====
+	     Internet traffic MUST be HTTPS (secure by default).
+	     NSAllowsLocalNetworking permits plain HTTP only to LAN/localhost
+	     for development (e.g. the XAMPP backend on 192.168.x.x), without
+	     weakening security for the production HTTPS API. -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<false/>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
+
+	<!-- ===== Privacy usage descriptions (required if the feature is used) ===== -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app needs access to your photos to attach images to care reports.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>This app saves generated care reports and signatures to your photo library.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This app uses the camera to capture images for care documentation.</string>
+
+	<!-- ===== Local network (iOS 14+) for reaching a LAN dev server ===== -->
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>This app connects to a local network server during development.</string>
+
+	<!-- ===== Export compliance: app uses only standard HTTPS encryption ===== -->
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 </dict>
 </plist>

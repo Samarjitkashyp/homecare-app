@@ -70,15 +70,33 @@
 	<!-- ===== App Transport Security =====
 	     Internet traffic MUST be HTTPS (secure by default).
 	     NSAllowsLocalNetworking permits plain HTTP only to LAN/localhost
-	     for development (e.g. the XAMPP backend on 192.168.x.x), without
-	     weakening security for the production HTTPS API. -->
+	     for development (e.g. a local XAMPP backend on 192.168.x.x).
+	     NSExceptionDomains below adds a narrow, explicit exception ONLY for
+	     the shared staging server IP (plain HTTP) — everything else on the
+	     internet still requires HTTPS. Replace/remove this once the backend
+	     is served over HTTPS (strongly recommended before real client data
+	     is used — see TODO). -->
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<false/>
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>3.6.237.64</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSIncludesSubdomains</key>
+				<false/>
+			</dict>
+		</dict>
 	</dict>
+	<!-- TODO: put the backend behind HTTPS (e.g. free Let's Encrypt cert)
+	     and remove the NSExceptionDomains entry above once done. Plain HTTP
+	     is fine for internal testing but should not carry real client/health
+	     data long-term. -->
 
 	<!-- ===== Privacy usage descriptions (required if the feature is used) ===== -->
 	<key>NSPhotoLibraryUsageDescription</key>

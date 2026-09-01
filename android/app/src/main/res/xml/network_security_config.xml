@@ -8,6 +8,7 @@
     </base-config>
 
     <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">3.6.237.64</domain>
         <domain includeSubdomains="true">192.168.0.237</domain>
         <domain includeSubdomains="true">43.205.243.18</domain>
         <domain includeSubdomains="true">localhost</domain>

@@ -64,7 +64,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.blue.shade200.withOpacity(0.5),
+                      color: Colors.blue.shade200.withValues(alpha: 0.5),
                       blurRadius: 25,
                       offset: const Offset(0, 10),
                     ),
@@ -81,7 +81,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.15),
+                            color: Colors.black.withValues(alpha: 0.15),
                             blurRadius: 15,
                             offset: const Offset(0, 5),
                           ),
@@ -114,7 +114,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                       admin?.email ?? 'admin@homecare.com',
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.white.withOpacity(0.85),
+                        color: Colors.white.withValues(alpha: 0.85),
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -127,7 +127,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                             vertical: 6,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(25),
                           ),
                           child: Row(
@@ -157,7 +157,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                             vertical: 6,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(25),
                           ),
                           child: Row(
@@ -315,7 +315,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Icon(icon, size: 24, color: color),
@@ -363,7 +363,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      barrierColor: Colors.black.withOpacity(0.6),
+      barrierColor: Colors.black.withValues(alpha: 0.6),
       builder: (context) => DraggableScrollableSheet(
         initialChildSize: 0.7,
         minChildSize: 0.4,

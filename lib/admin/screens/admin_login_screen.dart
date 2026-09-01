@@ -4,8 +4,9 @@ import 'package:homecare_app/admin/providers/admin_auth_provider.dart';
 import 'package:homecare_app/admin/screens/admin_dashboard_screen.dart';
 import 'package:homecare_app/widgets/custom_button.dart';
 import 'package:homecare_app/widgets/custom_text_field.dart';
-import 'package:homecare_app/widgets/loading_widget.dart';
 import 'package:homecare_app/screens/auth/login_screen.dart';
+import 'package:homecare_app/core/theme/app_style.dart';
+import 'package:homecare_app/core/utils/responsive.dart';
 
 class AdminLoginScreen extends StatefulWidget {
   const AdminLoginScreen({super.key});
@@ -21,6 +22,9 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
   bool _obscurePassword = true;
   bool _isLoading = false;
 
+  // Deeper navy accent to distinguish the admin area from the caregiver app.
+  static const Color _adminNavy = Color(0xFF0F2A54);
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -28,12 +32,23 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
     super.dispose();
   }
 
+  void _snack(String msg, Color color) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(msg),
+        backgroundColor: color,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppStyle.rSm)),
+      ),
+    );
+  }
+
   Future<void> _login() async {
+    FocusScope.of(context).unfocus();
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() {
-      _isLoading = true;
-    });
+    setState(() => _isLoading = true);
 
     final authProvider = Provider.of<AdminAuthProvider>(context, listen: false);
     final result = await authProvider.login(
@@ -42,230 +57,176 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
     );
 
     if (!mounted) return;
+    setState(() => _isLoading = false);
 
-    setState(() {
-      _isLoading = false;
-    });
-
-    if (result['success']) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('✅ Admin login successful!'),
-          backgroundColor: Colors.green,
-        ),
-      );
+    if (result['success'] == true) {
+      _snack('Admin login successful', AppStyle.success);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const AdminDashboardScreen()),
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(result['message'] ?? 'Login failed'),
-          backgroundColor: Colors.red,
-          duration: const Duration(seconds: 4),
-        ),
-      );
+      _snack(result['message']?.toString() ?? 'Login failed', AppStyle.danger);
     }
+  }
+
+  void _backToCaregiver() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => const LoginScreen()),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final authProvider = Provider.of<AdminAuthProvider>(context);
+    final busy = _isLoading || authProvider.isLoading;
 
-    return WillPopScope(
-      onWillPop: () async {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const LoginScreen()),
-        );
-        return false;
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) _backToCaregiver();
       },
       child: Scaffold(
-        body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Colors.blue.shade50, Colors.white],
-            ),
-          ),
+        body: DecoratedBox(
+          decoration: AppStyle.pageGradient,
           child: SafeArea(
             child: Center(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Logo / Icon
-                    Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Colors.blue.shade900, Colors.blue.shade700],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.blue.shade200.withOpacity(0.5),
-                            blurRadius: 30,
-                            offset: const Offset(0, 10),
-                          ),
-                        ],
+                padding: const EdgeInsets.symmetric(
+                    horizontal: AppStyle.xl, vertical: AppStyle.xxl),
+                child: ResponsiveCenter(
+                  maxWidth: 430,
+                  child: Column(
+                    children: [
+                      _brand(),
+                      const SizedBox(height: AppStyle.xxl),
+                      _loginCard(busy),
+                      const SizedBox(height: AppStyle.xl),
+                      CustomButton(
+                        onPressed: _backToCaregiver,
+                        text: 'Back to Caregiver Login',
+                        icon: Icons.arrow_back_rounded,
+                        isOutlined: true,
+                        isFullWidth: true,
+                        color: AppStyle.inkSoft,
                       ),
-                      child: const Icon(
-                        Icons.admin_panel_settings,
-                        size: 50,
-                        color: Colors.white,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-
-                    // Title
-                    const Text(
-                      'Admin Login',
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Enter your admin credentials',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey.shade600,
-                      ),
-                    ),
-                    const SizedBox(height: 32),
-
-                    // Login Card
-                    Container(
-                      padding: const EdgeInsets.all(24),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.shade100,
-                            blurRadius: 20,
-                            offset: const Offset(0, 10),
-                          ),
-                        ],
-                      ),
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          children: [
-                            CustomTextField(
-                              controller: _emailController,
-                              label: 'Email Address',
-                              hint: 'Enter your admin email',
-                              prefixIcon: Icons.email_outlined,
-                              keyboardType: TextInputType.emailAddress,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter email';
-                                }
-                                if (!value.contains('@')) {
-                                  return 'Please enter valid email';
-                                }
-                                return null;
-                              },
-                            ),
-                            const SizedBox(height: 16),
-                            CustomTextField(
-                              controller: _passwordController,
-                              label: 'Password',
-                              hint: 'Enter your password',
-                              prefixIcon: Icons.lock_outlined,
-                              obscureText: _obscurePassword,
-                              keyboardType: TextInputType.visiblePassword,
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                                  color: Colors.grey.shade500,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _obscurePassword = !_obscurePassword;
-                                  });
-                                },
-                              ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter password';
-                                }
-                                if (value.length < 6) {
-                                  return 'Password must be at least 6 characters';
-                                }
-                                return null;
-                              },
-                            ),
-                            const SizedBox(height: 24),
-                            (_isLoading || authProvider.isLoading)
-                                ? const LoadingWidget()
-                                : CustomButton(
-                              onPressed: _login,
-                              text: 'Login as Admin',
-                              isFullWidth: true,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    // Back to Caregiver Login
-                    InkWell(
-                      onTap: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const LoginScreen(),
-                          ),
-                        );
-                      },
-                      borderRadius: BorderRadius.circular(12),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 14,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey.shade300),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.arrow_back,
-                              size: 20,
-                              color: Colors.grey.shade600,
-                            ),
-                            const SizedBox(width: 10),
-                            Text(
-                              'Back to Caregiver Login',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.grey.shade600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _brand() {
+    return Column(
+      children: [
+        Container(
+          width: 88,
+          height: 88,
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [_adminNavy, AppStyle.primaryDark],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(24),
+            boxShadow: [
+              BoxShadow(
+                color: _adminNavy.withValues(alpha: 0.3),
+                blurRadius: 22,
+                offset: const Offset(0, 10),
+              ),
+            ],
+          ),
+          child: const Icon(Icons.admin_panel_settings_rounded,
+              size: 44, color: Colors.white),
+        ),
+        const SizedBox(height: AppStyle.lg),
+        const Text(
+          'Admin Portal',
+          style: TextStyle(
+            fontSize: 26,
+            fontWeight: FontWeight.w800,
+            color: AppStyle.ink,
+            letterSpacing: -0.3,
+          ),
+        ),
+        const SizedBox(height: 6),
+        const Text(
+          'Enter your admin credentials',
+          style: TextStyle(fontSize: 14.5, color: AppStyle.inkSoft),
+        ),
+      ],
+    );
+  }
+
+  Widget _loginCard(bool busy) {
+    return Container(
+      padding: const EdgeInsets.all(AppStyle.xl),
+      decoration: AppStyle.card(),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            CustomTextField(
+              controller: _emailController,
+              label: 'Email Address',
+              hint: 'admin@example.com',
+              prefixIcon: Icons.email_outlined,
+              keyboardType: TextInputType.emailAddress,
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Please enter email';
+                }
+                if (!value.contains('@') || !value.contains('.')) {
+                  return 'Please enter a valid email';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: AppStyle.lg),
+            CustomTextField(
+              controller: _passwordController,
+              label: 'Password',
+              hint: 'Enter your password',
+              prefixIcon: Icons.lock_outline_rounded,
+              obscureText: _obscurePassword,
+              keyboardType: TextInputType.visiblePassword,
+              suffixIcon: IconButton(
+                icon: Icon(
+                  _obscurePassword
+                      ? Icons.visibility_off_outlined
+                      : Icons.visibility_outlined,
+                  color: AppStyle.inkSoft,
+                ),
+                onPressed: () =>
+                    setState(() => _obscurePassword = !_obscurePassword),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter password';
+                }
+                if (value.length < 6) {
+                  return 'Password must be at least 6 characters';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: AppStyle.xl),
+            CustomButton(
+              onPressed: _login,
+              text: 'Sign In as Admin',
+              icon: Icons.login_rounded,
+              isFullWidth: true,
+              isLoading: busy,
+              color: _adminNavy,
+            ),
+          ],
         ),
       ),
     );

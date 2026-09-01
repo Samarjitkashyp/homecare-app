@@ -9,6 +9,8 @@ import 'package:homecare_app/admin/screens/policyholders_screen.dart';
 import 'package:homecare_app/admin/screens/shifts_screen.dart';
 import 'package:homecare_app/admin/screens/admin_profile_screen.dart';
 import 'package:homecare_app/admin/screens/admin_login_screen.dart';
+import 'package:homecare_app/core/theme/app_style.dart';
+import 'package:homecare_app/core/utils/responsive.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});
@@ -101,7 +103,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Colors.blue.shade900,
+        backgroundColor: const Color(0xFF0F2A54),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.menu, color: Colors.white),
@@ -113,7 +115,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.15),
+              color: Colors.white.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Row(
@@ -151,12 +153,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.blue.shade50, Colors.white],
+            colors: [AppStyle.canvasTop, AppStyle.canvasBottom],
           ),
         ),
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16),
-          child: Column(
+          child: ResponsiveCenter(
+            maxWidth: 760,
+            child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Welcome Section
@@ -193,7 +197,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       'Here\'s what\'s happening with your business today.',
                       style: TextStyle(
                         fontSize: 13,
-                        color: Colors.white.withOpacity(0.85),
+                        color: Colors.white.withValues(alpha: 0.85),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -206,7 +210,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               GridView.count(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: 2,
+                crossAxisCount: context.isTablet ? 4 : 2,
                 crossAxisSpacing: 12,
                 mainAxisSpacing: 12,
                 childAspectRatio: 1.5,
@@ -244,6 +248,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               _buildRecentActivityCard(stats?.recentShifts ?? []),
               const SizedBox(height: 16),
             ],
+            ),
           ),
         ),
       ),

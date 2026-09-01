@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homecare_app/core/theme/app_style.dart';
 
 class AdminStatCard extends StatelessWidget {
   final String title;
@@ -19,19 +20,8 @@ class AdminStatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.shade100,
-            blurRadius: 8,
-            offset: const Offset(0, 3),
-          ),
-        ],
-        border: Border.all(color: Colors.grey.shade50),
-      ),
+      padding: const EdgeInsets.all(AppStyle.md),
+      decoration: AppStyle.card(radius: AppStyle.rMd),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -43,9 +33,9 @@ class AdminStatCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 12,
-                    color: Colors.grey.shade600,
+                    color: AppStyle.inkSoft,
                     fontWeight: FontWeight.w500,
                   ),
                   maxLines: 1,
@@ -53,25 +43,22 @@ class AdminStatCard extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.all(6),
+                padding: const EdgeInsets.all(7),
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [color.withOpacity(0.1), color.withOpacity(0.05)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(8),
+                  color: color.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(9),
                 ),
                 child: Icon(icon, color: color, size: 16),
               ),
             ],
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 8),
           Text(
             value,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+            style: TextStyle(
+              fontSize: 21,
+              fontWeight: FontWeight.w800,
+              color: color,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -80,10 +67,7 @@ class AdminStatCard extends StatelessWidget {
             const SizedBox(height: 2),
             Text(
               subtitle!,
-              style: TextStyle(
-                fontSize: 10,
-                color: Colors.grey.shade500,
-              ),
+              style: const TextStyle(fontSize: 10.5, color: AppStyle.inkSoft),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),

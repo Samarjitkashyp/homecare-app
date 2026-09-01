@@ -97,10 +97,12 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       appBar: AppBar(
         title: const Text(
           'Admin Dashboard',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: TextStyle(
             color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+            fontSize: 19,
+            fontWeight: FontWeight.w700,
           ),
         ),
         backgroundColor: const Color(0xFF0F2A54),
@@ -113,27 +115,33 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
         ),
         actions: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 const CircleAvatar(
                   radius: 12,
                   backgroundColor: Colors.white,
                   child: Icon(Icons.person, size: 14, color: Colors.blue),
                 ),
-                const SizedBox(width: 8),
-                Text(
-                  authProvider.adminUser?.name ?? 'Admin',
-                  style: const TextStyle(color: Colors.white, fontSize: 13),
+                const SizedBox(width: 6),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 84),
+                  child: Text(
+                    authProvider.adminUser?.name ?? 'Admin',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(color: Colors.white, fontSize: 12.5),
+                  ),
                 ),
               ],
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 4),
           IconButton(
             icon: const Icon(Icons.logout, color: Colors.white),
             onPressed: () async {

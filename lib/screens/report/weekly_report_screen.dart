@@ -12,6 +12,8 @@ import 'package:homecare_app/providers/report_provider.dart';
 import 'package:homecare_app/widgets/custom_button.dart';
 import 'package:homecare_app/widgets/loading_widget.dart';
 import 'package:homecare_app/core/utils/globals.dart';
+import 'package:homecare_app/core/theme/app_style.dart';
+import 'package:homecare_app/core/utils/app_logger.dart';
 
 class WeeklyReportScreen extends StatefulWidget {
   const WeeklyReportScreen({super.key});
@@ -92,7 +94,7 @@ class _WeeklyReportScreenState extends State<WeeklyReportScreen> {
                     openAppSettings();
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue.shade700,
+                    backgroundColor: AppStyle.primaryDark,
                     foregroundColor: Colors.white,
                   ),
                   child: const Text('Open Settings'),
@@ -108,20 +110,20 @@ class _WeeklyReportScreenState extends State<WeeklyReportScreen> {
       // because FilePicker often works regardless as it uses a system activity.
       return true;
     } catch (e) {
-      print('Permission request error: $e');
+      AppLogger.d('Permission request error: $e');
       return true; // Proceed anyway and let the picker/file write handle errors
     }
   }
 
   // Show directory picker and save PDF
   Future<void> _downloadReport() async {
-    print('🔵 _downloadReport triggered');
+    AppLogger.d('🔵 _downloadReport triggered');
     final timeProvider = Provider.of<TimeProvider>(context, listen: false);
     final reportProvider = Provider.of<ReportProvider>(context, listen: false);
 
     if (timeProvider.currentEntryId == null ||
         timeProvider.currentEntryId! <= 0) {
-      print('🟠 No currentEntryId found');
+      AppLogger.d('🟠 No currentEntryId found');
       Globals.scaffoldMessengerKey.currentState?.showSnackBar(
         const SnackBar(
           content: Text(
@@ -133,7 +135,7 @@ class _WeeklyReportScreenState extends State<WeeklyReportScreen> {
     }
 
     final hasPermission = await _requestStoragePermission();
-    print('🔵 Permission status: $hasPermission');
+    AppLogger.d('🔵 Permission status: $hasPermission');
     if (!hasPermission) return;
 
     setState(() {
@@ -142,12 +144,12 @@ class _WeeklyReportScreenState extends State<WeeklyReportScreen> {
 
     try {
       if (reportProvider.report == null) {
-        print('🔵 Generating report for ID: ${timeProvider.currentEntryId}');
+        AppLogger.d('🔵 Generating report for ID: ${timeProvider.currentEntryId}');
         final response = await reportProvider.generateReport(
           timeProvider.currentEntryId!,
         );
         if (!response.status) {
-          print('🔴 Report generation failed: ${response.message}');
+          AppLogger.d('🔴 Report generation failed: ${response.message}');
           if (!mounted) return;
           setState(() {
             _isDownloading = false;
@@ -163,7 +165,7 @@ class _WeeklyReportScreenState extends State<WeeklyReportScreen> {
       }
 
       final report = reportProvider.report!;
-      print('✅ Report data ready');
+      AppLogger.d('✅ Report data ready');
 
       // Prepare PDF data
       final List<Map<String, dynamic>> tableData = [
@@ -205,7 +207,7 @@ class _WeeklyReportScreenState extends State<WeeklyReportScreen> {
         });
       }
 
-      print('🔵 Starting PDF generation');
+      AppLogger.d('🔵 Starting PDF generation');
       final pdfDoc = await SimplePdf.generate(
         header: PdfHeader(
           title: 'Care Certification Report',
@@ -222,24 +224,24 @@ class _WeeklyReportScreenState extends State<WeeklyReportScreen> {
       final bytes = await pdfDoc.save();
       final fileName =
           'Homecare_Report_${DateTime.now().millisecondsSinceEpoch}.pdf';
-      print('✅ PDF document saved to bytes');
+      AppLogger.d('✅ PDF document saved to bytes');
 
       String? selectedDirectory;
 
       if (Platform.isAndroid) {
-        print('🔵 Opening directory picker...');
+        AppLogger.d('🔵 Opening directory picker...');
         try {
           selectedDirectory = await FilePicker.platform.getDirectoryPath(
             dialogTitle: 'Select folder to save PDF',
           );
-          print('🔵 Picker result: $selectedDirectory');
+          AppLogger.d('🔵 Picker result: $selectedDirectory');
         } catch (e) {
-          print('🔴 Directory picker error: $e');
+          AppLogger.d('🔴 Directory picker error: $e');
         }
 
         // If user cancelled the picker
         if (selectedDirectory == null) {
-          print('🟠 User cancelled directory selection');
+          AppLogger.d('🟠 User cancelled directory selection');
           if (mounted) {
             setState(() {
               _isDownloading = false;
@@ -259,10 +261,10 @@ class _WeeklyReportScreenState extends State<WeeklyReportScreen> {
         finalPath = '${directory.path}/$fileName';
       }
 
-      print('🔵 Saving file to: $finalPath');
+      AppLogger.d('🔵 Saving file to: $finalPath');
       final File file = File(finalPath);
       await file.writeAsBytes(bytes, flush: true);
-      print('✅ File written successfully');
+      AppLogger.d('✅ File written successfully');
 
       if (!mounted) return;
       setState(() {
@@ -272,7 +274,7 @@ class _WeeklyReportScreenState extends State<WeeklyReportScreen> {
 
       _showSuccessDialog(finalPath);
     } catch (e) {
-      print('🔴 Download error: $e');
+      AppLogger.d('🔴 Download error: $e');
       if (!mounted) return;
       setState(() {
         _isDownloading = false;
@@ -387,7 +389,7 @@ class _WeeklyReportScreenState extends State<WeeklyReportScreen> {
                     icon: const Icon(Icons.folder_open, size: 18),
                     label: const Text('Open File'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue.shade700,
+                      backgroundColor: AppStyle.primaryDark,
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
@@ -441,7 +443,7 @@ class _WeeklyReportScreenState extends State<WeeklyReportScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Colors.blue.shade700,
+        backgroundColor: AppStyle.primaryDark,
         elevation: 0,
         centerTitle: false,
         actions: [
@@ -473,7 +475,7 @@ class _WeeklyReportScreenState extends State<WeeklyReportScreen> {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Colors.blue.shade50, Colors.white],
+                  colors: [AppStyle.canvasTop, AppStyle.canvasBottom],
                 ),
               ),
               child: reportProvider.report == null
@@ -547,7 +549,7 @@ class _WeeklyReportScreenState extends State<WeeklyReportScreen> {
               borderRadius: BorderRadius.circular(14),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.blue.shade200.withOpacity(0.3),
+                  color: Colors.blue.shade200.withValues(alpha: 0.3),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),
@@ -558,7 +560,7 @@ class _WeeklyReportScreenState extends State<WeeklyReportScreen> {
                 Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: const Icon(
@@ -584,7 +586,7 @@ class _WeeklyReportScreenState extends State<WeeklyReportScreen> {
                         'Report for ${report.dateOfService ?? ''}',
                         style: TextStyle(
                           fontSize: 11,
-                          color: Colors.white.withOpacity(0.8),
+                          color: Colors.white.withValues(alpha: 0.8),
                         ),
                       ),
                     ],
@@ -806,7 +808,7 @@ class _WeeklyReportScreenState extends State<WeeklyReportScreen> {
               Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Icon(icon, size: 16, color: color),

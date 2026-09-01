@@ -9,6 +9,7 @@ import 'package:homecare_app/widgets/loading_widget.dart';
 import 'package:homecare_app/screens/report/weekly_report_screen.dart';
 import 'package:homecare_app/screens/home/home_screen.dart';
 import 'package:homecare_app/core/utils/globals.dart';
+import 'package:homecare_app/core/theme/app_style.dart';
 
 class SignatureScreen extends StatefulWidget {
   const SignatureScreen({super.key});
@@ -282,7 +283,7 @@ class _SignatureScreenState extends State<SignatureScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          backgroundColor: Colors.blue.shade700,
+          backgroundColor: AppStyle.primaryDark,
           elevation: 0,
           centerTitle: false,
         ),
@@ -292,7 +293,7 @@ class _SignatureScreenState extends State<SignatureScreen> {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [Colors.blue.shade50, Colors.white],
+              colors: [AppStyle.canvasTop, AppStyle.canvasBottom],
             ),
           ),
           child: Column(
@@ -390,7 +391,7 @@ class _SignatureScreenState extends State<SignatureScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Colors.blue.shade700,
+        backgroundColor: AppStyle.primaryDark,
         elevation: 0,
         centerTitle: false,
         actions: [
@@ -408,7 +409,7 @@ class _SignatureScreenState extends State<SignatureScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.blue.shade50, Colors.white],
+            colors: [AppStyle.canvasTop, AppStyle.canvasBottom],
           ),
         ),
         child: SingleChildScrollView(

@@ -1,10 +1,24 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 class AppConstants {
   static const String appName = 'Absolute Choice Homecare';
-  // Local XAMPP backend — physical Android device on the same WiFi.
-  // PC LAN IP: 192.168.0.237 (Apache on port 80).
-  // Emulator? use  http://10.0.2.2/homecare/
-  // Desktop/Web? use http://localhost/homecare/
-  static const String baseUrl = 'http://192.168.0.237/homecare/';
+
+  // Fallback used if .env is missing/unreadable, or BASE_URL isn't set.
+  // Update .env's BASE_URL to point the app at a different backend
+  // (no code change or rebuild-from-scratch needed — just hot restart).
+  static const String _fallbackBaseUrl = 'http://192.168.0.237/homecare/';
+
+  static String get baseUrl {
+    try {
+      if (dotenv.isInitialized) {
+        final envUrl = dotenv.env['BASE_URL']?.trim();
+        if (envUrl != null && envUrl.isNotEmpty) return envUrl;
+      }
+    } catch (_) {
+      // fall through to default
+    }
+    return _fallbackBaseUrl;
+  }
 
   // Storage Keys
   static const String tokenKey = 'auth_token';

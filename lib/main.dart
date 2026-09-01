@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:homecare_app/providers/auth_provider.dart';
 import 'package:homecare_app/providers/time_provider.dart';
@@ -22,8 +23,17 @@ import 'package:homecare_app/core/theme/app_theme.dart';
 void main() {
   // Run the whole app inside a guarded zone so that any uncaught async
   // error is logged instead of crashing the app for the user.
-  runZonedGuarded(() {
+  runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
+
+    // Load .env so AppConstants.baseUrl can be switched without touching
+    // code (e.g. moving between a Windows/XAMPP backend and a Mac backend).
+    // If the file is missing/unreadable, AppConstants falls back safely.
+    try {
+      await dotenv.load(fileName: '.env');
+    } catch (e, s) {
+      AppLogger.e('Failed to load .env, using default backend URL', e, s);
+    }
 
     // Framework build/layout/paint errors -> log, and in release show a
     // friendly fallback instead of the red error screen.

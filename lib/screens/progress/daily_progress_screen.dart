@@ -7,6 +7,8 @@ import 'package:homecare_app/widgets/loading_widget.dart';
 import 'package:homecare_app/core/constants/app_constants.dart';
 import 'package:homecare_app/screens/home/home_screen.dart';
 import 'package:homecare_app/core/utils/globals.dart';
+import 'package:homecare_app/core/theme/app_style.dart';
+import 'package:homecare_app/core/utils/responsive.dart';
 
 class DailyProgressScreen extends StatefulWidget {
   const DailyProgressScreen({super.key});
@@ -137,7 +139,7 @@ class _DailyProgressScreenState extends State<DailyProgressScreen> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      barrierColor: Colors.black.withOpacity(0.6),
+      barrierColor: Colors.black.withValues(alpha: 0.6),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(24),
@@ -334,7 +336,7 @@ class _DailyProgressScreenState extends State<DailyProgressScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          backgroundColor: Colors.blue.shade700,
+          backgroundColor: AppStyle.primaryDark,
           elevation: 0,
         ),
         body: Container(
@@ -343,7 +345,7 @@ class _DailyProgressScreenState extends State<DailyProgressScreen> {
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [Colors.blue.shade50, Colors.white],
+              colors: [AppStyle.canvasTop, AppStyle.canvasBottom],
             ),
           ),
           child: Column(
@@ -413,7 +415,7 @@ class _DailyProgressScreenState extends State<DailyProgressScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Colors.blue.shade700,
+        backgroundColor: AppStyle.primaryDark,
         elevation: 0,
         actions: [
           IconButton(
@@ -427,7 +429,7 @@ class _DailyProgressScreenState extends State<DailyProgressScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.blue.shade50, Colors.white],
+            colors: [AppStyle.canvasTop, AppStyle.canvasBottom],
           ),
         ),
         child: SingleChildScrollView(
@@ -561,10 +563,8 @@ class _DailyProgressScreenState extends State<DailyProgressScreen> {
                       final isSelected = _adls[key] != null;
                       return Container(
                         margin: const EdgeInsets.only(bottom: 6),
+                        clipBehavior: Clip.antiAlias,
                         decoration: BoxDecoration(
-                          color: isSelected
-                              ? Colors.blue.shade50
-                              : Colors.grey.shade50,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
                             color: isSelected
@@ -572,7 +572,11 @@ class _DailyProgressScreenState extends State<DailyProgressScreen> {
                                 : Colors.grey.shade200,
                           ),
                         ),
-                        child: ListTile(
+                        child: Material(
+                          color: isSelected
+                              ? Colors.blue.shade50
+                              : Colors.grey.shade50,
+                          child: ListTile(
                           contentPadding: const EdgeInsets.symmetric(
                             horizontal: 12,
                             vertical: 2,
@@ -622,6 +626,7 @@ class _DailyProgressScreenState extends State<DailyProgressScreen> {
                             ],
                           ),
                           onTap: () => _showADLSelector(key, label),
+                          ),
                         ),
                       );
                     }).toList(),
@@ -706,10 +711,8 @@ class _DailyProgressScreenState extends State<DailyProgressScreen> {
                       final isChecked = _iadls[key] ?? false;
                       return Container(
                         margin: const EdgeInsets.only(bottom: 6),
+                        clipBehavior: Clip.antiAlias,
                         decoration: BoxDecoration(
-                          color: isChecked
-                              ? Colors.green.shade50
-                              : Colors.grey.shade50,
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(
                             color: isChecked
@@ -717,7 +720,11 @@ class _DailyProgressScreenState extends State<DailyProgressScreen> {
                                 : Colors.grey.shade200,
                           ),
                         ),
-                        child: CheckboxListTile(
+                        child: Material(
+                          color: isChecked
+                              ? Colors.green.shade50
+                              : Colors.grey.shade50,
+                          child: CheckboxListTile(
                           contentPadding: const EdgeInsets.symmetric(
                             horizontal: 12,
                             vertical: 2,
@@ -741,6 +748,7 @@ class _DailyProgressScreenState extends State<DailyProgressScreen> {
                               _iadls[key] = value ?? false;
                             });
                           },
+                          ),
                         ),
                       );
                     }).toList(),

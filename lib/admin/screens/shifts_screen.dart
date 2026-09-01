@@ -785,14 +785,15 @@ class _ShiftsScreenState extends State<ShiftsScreen> {
                                         ],
                                       ),
                                       const SizedBox(height: 10),
-                                      Row(
+                                      Wrap(
+                                        spacing: 8,
+                                        runSpacing: 6,
                                         children: [
                                           _buildInfoChip(
                                             Icons.calendar_today,
                                             shift.date,
                                             Colors.blue,
                                           ),
-                                          const SizedBox(width: 8),
                                           _buildInfoChip(
                                             Icons.access_time,
                                             '${shift.timeIn} - ${shift.timeOut ?? 'N/A'}',
@@ -801,14 +802,15 @@ class _ShiftsScreenState extends State<ShiftsScreen> {
                                         ],
                                       ),
                                       const SizedBox(height: 8),
-                                      Row(
+                                      Wrap(
+                                        spacing: 8,
+                                        runSpacing: 6,
                                         children: [
                                           _buildInfoChip(
                                             Icons.timer,
                                             '${shift.totalHours.toStringAsFixed(2)} hrs',
                                             Colors.purple,
                                           ),
-                                          const SizedBox(width: 8),
                                           _buildInfoChip(
                                             Icons.attach_money,
                                             '\$${shift.totalCharge.toStringAsFixed(2)}',

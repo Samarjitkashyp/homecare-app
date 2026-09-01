@@ -566,7 +566,9 @@ class _PolicyholdersScreenState extends State<PolicyholdersScreen> {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   const SizedBox(height: 4),
-                                  Row(
+                                  Wrap(
+                                    spacing: 8,
+                                    runSpacing: 6,
                                     children: [
                                       Container(
                                         padding: const EdgeInsets.symmetric(
@@ -574,12 +576,13 @@ class _PolicyholdersScreenState extends State<PolicyholdersScreen> {
                                           vertical: 4,
                                         ),
                                         decoration: BoxDecoration(
-                                          color: Colors.blue
-                                              .shade50, // ✅ Same as Caregivers
+                                          color: Colors
+                                              .blue.shade50, // ✅ Same as Caregivers
                                           borderRadius:
                                               BorderRadius.circular(12),
                                         ),
                                         child: Row(
+                                          mainAxisSize: MainAxisSize.min,
                                           children: [
                                             const Icon(
                                               Icons.phone,
@@ -599,7 +602,6 @@ class _PolicyholdersScreenState extends State<PolicyholdersScreen> {
                                           ],
                                         ),
                                       ),
-                                      const SizedBox(width: 8),
                                       Container(
                                         padding: const EdgeInsets.symmetric(
                                           horizontal: 10,
@@ -611,6 +613,7 @@ class _PolicyholdersScreenState extends State<PolicyholdersScreen> {
                                               BorderRadius.circular(12),
                                         ),
                                         child: Row(
+                                          mainAxisSize: MainAxisSize.min,
                                           children: [
                                             const Icon(
                                               Icons.work_outline,

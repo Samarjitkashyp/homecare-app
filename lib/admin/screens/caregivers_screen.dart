@@ -585,7 +585,9 @@ class _CaregiversScreenState extends State<CaregiversScreen> {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   const SizedBox(height: 6),
-                                  Row(
+                                  Wrap(
+                                    spacing: 8,
+                                    runSpacing: 6,
                                     children: [
                                       Container(
                                         padding: const EdgeInsets.symmetric(
@@ -598,6 +600,7 @@ class _CaregiversScreenState extends State<CaregiversScreen> {
                                               BorderRadius.circular(12),
                                         ),
                                         child: Row(
+                                          mainAxisSize: MainAxisSize.min,
                                           children: [
                                             const Icon(
                                               Icons.work_outline,
@@ -616,7 +619,6 @@ class _CaregiversScreenState extends State<CaregiversScreen> {
                                           ],
                                         ),
                                       ),
-                                      const SizedBox(width: 8),
                                       Container(
                                         padding: const EdgeInsets.symmetric(
                                           horizontal: 10,
@@ -628,6 +630,7 @@ class _CaregiversScreenState extends State<CaregiversScreen> {
                                               BorderRadius.circular(12),
                                         ),
                                         child: Row(
+                                          mainAxisSize: MainAxisSize.min,
                                           children: [
                                             const Icon(
                                               Icons.attach_money,

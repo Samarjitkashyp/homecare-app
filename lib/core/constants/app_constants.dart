@@ -6,7 +6,7 @@ class AppConstants {
   // Fallback used if .env is missing/unreadable, or BASE_URL isn't set.
   // Update .env's BASE_URL to point the app at a different backend
   // (no code change or rebuild-from-scratch needed — just hot restart).
-  static const String _fallbackBaseUrl = 'http://3.6.237.64/homecare-backend/';
+  static const String _fallbackBaseUrl = 'https://homecare.digihiveassam.com/';
 
   static String get baseUrl {
     try {
